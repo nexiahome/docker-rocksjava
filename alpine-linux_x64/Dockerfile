@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM openjdk:8-jdk-alpine
 
 # update Alpine with latest versions
 RUN echo '@edge http://nl.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories \
@@ -30,17 +30,8 @@ RUN apk add snappy snappy-dev \
             lz4 lz4-dev \
             linux-headers
 
-# install OpenJDK7
-RUN apk add openjdk7 \
-  && apk add java-cacerts \
-  && rm /usr/lib/jvm/java-1.7-openjdk/jre/lib/security/cacerts \
-  && ln -s /etc/ssl/certs/java/cacerts /usr/lib/jvm/java-1.7-openjdk/jre/lib/security/cacerts
-
 # cleanup
 RUN rm -rf /var/cache/apk/*
-
-# puts javac in the PATH
-ENV JAVA_HOME=/usr/lib/jvm/java-1.7-openjdk PATH=/usr/lib/jvm/java-1.7-openjdk/bin:$PATH
 
 # gflags from source
 RUN cd /tmp &&\
@@ -50,7 +41,7 @@ RUN cd /tmp &&\
     rm -rf /tmp/*
 
 # zstd from source
-ENV ZSTD_VER=1.2.0 ZSTD_SHA256=4a7e4593a3638276ca7f2a09dc4f38e674d8317bbea51626393ca73fc047cbfb ZSTD_DOWNLOAD_BASE=https://github.com/facebook/zstd/archive
+ENV ZSTD_VER=1.4.0 ZSTD_SHA256=63be339137d2b683c6d19a9e34f4fb684790e864fee13c7dd40e197a64c705c1 ZSTD_DOWNLOAD_BASE=https://github.com/facebook/zstd/archive
 RUN cd /tmp &&\
     curl -o zstd-${ZSTD_VER}.tar.gz -L ${ZSTD_DOWNLOAD_BASE}/v${ZSTD_VER}.tar.gz &&\
     ZSTD_SHA256_ACTUAL=`openssl sha256 -r zstd-${ZSTD_VER}.tar.gz | cut -d ' ' -f 1` &&\
