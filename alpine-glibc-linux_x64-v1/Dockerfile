@@ -37,6 +37,10 @@ RUN apk add openjdk8 \
   && rm /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/cacerts \
   && ln -s /etc/ssl/certs/java/cacerts /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/cacerts
 
+# replace muslc JNI with OpenJDK JNI
+RUN ln -s /usr/lib/jvm/java-1.8-openjdk/include/jni.h /usr/lib/gcc/x86_64-alpine-linux-musl/8.3.0/include/jni.h \
+  && ln -s /usr/lib/jvm/java-1.8-openjdk/include/linux/jni_md.h  /usr/lib/gcc/x86_64-alpine-linux-musl/8.3.0/include/jni_md.h
+
 # cleanup
 RUN rm -rf /var/cache/apk/*
 
