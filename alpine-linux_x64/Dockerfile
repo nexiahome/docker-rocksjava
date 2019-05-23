@@ -13,6 +13,7 @@ RUN apk add ca-certificates
 RUN apk add build-base \
             coreutils \
             file \
+            cmake \
             git
 
 # install tool dependencies for building RocksDB static library
